@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#fff0f5">
 <title>A Perfect Restoration ❤️</title>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <style>
@@ -19,7 +21,7 @@
     overflow: hidden;
   }
   h1 {
-    font-size: 2.5em;
+    font-size: 2em;
     margin: 0 20px 30px 20px;
     color: #ff1493;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
@@ -36,17 +38,18 @@
   }
   button {
     padding: 15px 30px;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
     border: none;
     border-radius: 50px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
   #yes-button { background-color: #ff69b4; color: white; }
   #no-button { background-color: #f08080; color: white; }
 
-  /* Floating Animation */
   .floating-icon {
     position: absolute;
     bottom: -50px;
@@ -66,7 +69,7 @@
 
 <h1 id="question">Will you accept a Full-Mouth Rehab of my heart? 💎🦷</h1>
 
-<audio id="bg-music" loop>
+<audio id="bg-music" loop playsinline>
   <source src="https://docs.google.com/uc?export=open&id=1M0LUmihaz1HVBXvIzzO8hI5mQBIl-HYE" type="audio/mpeg">
 </audio>
 
@@ -78,7 +81,7 @@
 <script>
 let messageIndex = 0;
 const music = document.getElementById('bg-music');
-const icons = ['❤️', '🦷', '💎', '✨', '👑']; // Hearts, Teeth, Diamonds (for crowns), and Sparkles
+const icons = ['❤️', '🦷', '💎', '✨', '👑'];
 
 const messages = [
   "Wait! Our margins were so closed! 😭",
@@ -92,7 +95,10 @@ const messages = [
 ];
 
 function playMusic() {
-  music.play().catch(e => console.log("Audio requires interaction"));
+  // Safari unlocks audio on this user-triggered click
+  music.play().catch(e => {
+    console.log("Audio playback failed. Safari might need one more click interaction.");
+  });
 }
 
 function createFloatingIcon() {
@@ -102,7 +108,6 @@ function createFloatingIcon() {
   icon.style.left = Math.random() * 100 + "vw";
   icon.style.animationDuration = (Math.random() * 3 + 3) + "s";
   document.body.appendChild(icon);
-  
   setTimeout(() => icon.remove(), 6000);
 }
 
@@ -110,7 +115,7 @@ function createFloatingIcon() {
 setInterval(createFloatingIcon, 400);
 
 function handleNoClick() {
-  playMusic(); 
+  // No music here - keep it silent until she says Yes!
   const noButton = document.querySelector('#no-button');
   const yesButton = document.querySelector('#yes-button');
   
@@ -118,26 +123,29 @@ function handleNoClick() {
   messageIndex = (messageIndex + 1) % messages.length;
 
   const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
-  if (currentSize < 100) { 
+  if (currentSize < 80) { 
     yesButton.style.fontSize = `${currentSize * 1.2}px`;
     yesButton.style.padding = `${parseFloat(window.getComputedStyle(yesButton).padding) * 1.1}px`;
   }
 }
 
 function handleYesClick() {
+  // The big reveal: Music, Confetti, and Success Message!
   playMusic();
+  
   document.getElementById('question').textContent = "Ideal Esthetics & Function Achieved! ❤️";
   
   confetti({
     particleCount: 200,
     spread: 80,
     origin: { y: 0.6 },
-    colors: ['#ff69b4', '#ffffff', '#ffd700'] // Pink, White, and Gold (for those crowns!)
+    colors: ['#ff69b4', '#ffffff', '#ffd700'] 
   });
 
+  // Redirect after 4 seconds so she can hear the song first
   setTimeout(() => {
     window.location.href = "https://drive.google.com/file/d/1WAOiua_2-YDSZo51gqCgQiyHAWPyygi9/view?usp=sharing";
-  }, 2500);
+  }, 4000);
 }
 </script>
 
