@@ -21,6 +21,26 @@
     overflow: hidden;
     touch-action: manipulation;
   }
+
+  /* Music Toggle Button */
+  #music-control {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+    z-index: 100;
+    font-size: 20px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   h1 {
     font-size: 2em;
     margin: 0 20px 30px 20px;
@@ -28,6 +48,7 @@
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     z-index: 10;
   }
+
   .container {
     display: flex;
     flex-direction: row;
@@ -37,6 +58,7 @@
     gap: 20px;
     z-index: 10;
   }
+
   button {
     padding: 15px 30px;
     font-size: 18px;
@@ -47,6 +69,7 @@
     transition: all 0.3s ease;
     -webkit-tap-highlight-color: transparent;
   }
+
   #yes-button { background-color: #ff69b4; color: white; }
   #no-button { background-color: #f08080; color: white; }
 
@@ -67,9 +90,11 @@
 </head>
 <body>
 
+<div id="music-control" onclick="toggleMusic()">🎵</div>
+
 <h1 id="question">Will you accept a Full-Mouth Rehab of my heart? 💎🦷</h1>
 
-<audio id="bg-music" loop playsinline preload="auto">
+<audio id="bg-music" loop playsinline preload="auto" crossorigin="anonymous">
   <source src="https://raw.githubusercontent.com/LailaHusky/for-my--prosthodontist/main/Anuv_Jain_-_Baarishein_(mp3.pm).mp3" type="audio/mpeg">
 </audio>
 
@@ -80,8 +105,8 @@
 
 <script>
 let messageIndex = 0;
-let audioUnlocked = false;
 const music = document.getElementById('bg-music');
+const musicBtn = document.getElementById('music-control');
 const icons = ['❤️', '🦷', '💎', '✨', '👑'];
 
 const messages = [
@@ -95,15 +120,21 @@ const messages = [
   "Click Yes, or I'll have a total breakdown! 🛠️"
 ];
 
-// Safari needs a direct user interaction to "unlock" audio
-function unlockAudio() {
-  if (!audioUnlocked) {
-    music.play().then(() => {
-      // If they haven't said Yes yet, we immediately pause.
-      // The "bridge" is now open for later.
-      music.pause();
-      audioUnlocked = true;
-    }).catch(e => console.log("Audio waiting for interaction"));
+// Try to play music automatically on first touch of the screen
+document.body.addEventListener('touchstart', function() {
+    if (music.paused) {
+        music.play();
+        musicBtn.innerText = "🎵";
+    }
+}, {once: true});
+
+function toggleMusic() {
+  if (music.paused) {
+    music.play();
+    musicBtn.innerText = "🎵";
+  } else {
+    music.pause();
+    musicBtn.innerText = "🔇";
   }
 }
 
@@ -120,8 +151,10 @@ function createFloatingIcon() {
 setInterval(createFloatingIcon, 400);
 
 function handleNoClick() {
-  unlockAudio(); // Unlock audio hardware on first tap
-  
+  // Ensure music is playing
+  music.play();
+  musicBtn.innerText = "🎵";
+
   const noButton = document.querySelector('#no-button');
   const yesButton = document.querySelector('#yes-button');
   
@@ -129,15 +162,16 @@ function handleNoClick() {
   messageIndex = (messageIndex + 1) % messages.length;
 
   const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
-  if (currentSize < 80) { 
+  if (currentSize < 100) { 
     yesButton.style.fontSize = `${currentSize * 1.2}px`;
     yesButton.style.padding = `${parseFloat(window.getComputedStyle(yesButton).padding) * 1.1}px`;
   }
 }
 
 function handleYesClick() {
-  // If not unlocked yet, play() will work here because it's a direct click
+  // Ensure music is playing
   music.play();
+  musicBtn.innerText = "🎵";
   
   document.getElementById('question').textContent = "Ideal Esthetics & Function Achieved! ❤️";
   
@@ -148,10 +182,10 @@ function handleYesClick() {
     colors: ['#ff69b4', '#ffffff', '#ffd700'] 
   });
 
-  // Redirect after 4 seconds
+  // Open the image in a new tab so the music keeps playing in this tab
   setTimeout(() => {
-    window.location.href = "https://drive.google.com/file/d/1WAOiua_2-YDSZo51gqCgQiyHAWPyygi9/view?usp=sharing";
-  }, 4000);
+    window.open("https://drive.google.com/file/d/1WAOiua_2-YDSZo51gqCgQiyHAWPyygi9/view?usp=sharing", "_blank");
+  }, 2000);
 }
 </script>
 
