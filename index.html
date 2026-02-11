@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Perfect Restoration ❤️</title>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    background: #fff0f5;
+    overflow: hidden;
+  }
+  h1 {
+    font-size: 2.5em;
+    margin: 0 20px 30px 20px;
+    color: #ff1493;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    z-index: 10;
+  }
+  .container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    z-index: 10;
+  }
+  button {
+    padding: 15px 30px;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+  #yes-button { background-color: #ff69b4; color: white; }
+  #no-button { background-color: #f08080; color: white; }
+
+  /* Floating Animation */
+  .floating-icon {
+    position: absolute;
+    bottom: -50px;
+    font-size: 24px;
+    pointer-events: none;
+    animation: floatUp 5s linear forwards;
+    opacity: 0.7;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<h1 id="question">Will you accept a Full-Mouth Rehab of my heart? 💎🦷</h1>
+
+<audio id="bg-music" loop>
+  <source src="https://docs.google.com/uc?export=open&id=1M0LUmihaz1HVBXvIzzO8hI5mQBIl-HYE" type="audio/mpeg">
+</audio>
+
+<div class="container">
+  <button id="yes-button" onclick="handleYesClick()">Yes ❤️</button>
+  <button id="no-button" onclick="handleNoClick()">No 😢</button>
+</div>
+
+<script>
+let messageIndex = 0;
+const music = document.getElementById('bg-music');
+const icons = ['❤️', '🦷', '💎', '✨', '👑']; // Hearts, Teeth, Diamonds (for crowns), and Sparkles
+
+const messages = [
+  "Wait! Our margins were so closed! 😭",
+  "Don't leave me with a high occlusion! 🦷",
+  "Is it my vertical dimension? I can change! 📏",
+  "I'm a permanent restoration, not a temp! 💍",
+  "Don't reject this treatment plan! 📋",
+  "I'm losing my retention over you! 🥺",
+  "We have a perfect path of insertion! 💕",
+  "Click Yes, or I'll have a total breakdown! 🛠️"
+];
+
+function playMusic() {
+  music.play().catch(e => console.log("Audio requires interaction"));
+}
+
+function createFloatingIcon() {
+  const icon = document.createElement('div');
+  icon.className = 'floating-icon';
+  icon.innerText = icons[Math.floor(Math.random() * icons.length)];
+  icon.style.left = Math.random() * 100 + "vw";
+  icon.style.animationDuration = (Math.random() * 3 + 3) + "s";
+  document.body.appendChild(icon);
+  
+  setTimeout(() => icon.remove(), 6000);
+}
+
+// Start floating icons immediately
+setInterval(createFloatingIcon, 400);
+
+function handleNoClick() {
+  playMusic(); 
+  const noButton = document.querySelector('#no-button');
+  const yesButton = document.querySelector('#yes-button');
+  
+  noButton.textContent = messages[messageIndex];
+  messageIndex = (messageIndex + 1) % messages.length;
+
+  const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
+  if (currentSize < 100) { 
+    yesButton.style.fontSize = `${currentSize * 1.2}px`;
+    yesButton.style.padding = `${parseFloat(window.getComputedStyle(yesButton).padding) * 1.1}px`;
+  }
+}
+
+function handleYesClick() {
+  playMusic();
+  document.getElementById('question').textContent = "Ideal Esthetics & Function Achieved! ❤️";
+  
+  confetti({
+    particleCount: 200,
+    spread: 80,
+    origin: { y: 0.6 },
+    colors: ['#ff69b4', '#ffffff', '#ffd700'] // Pink, White, and Gold (for those crowns!)
+  });
+
+  setTimeout(() => {
+    window.location.href = "https://drive.google.com/file/d/1WAOiua_2-YDSZo51gqCgQiyHAWPyygi9/view?usp=sharing";
+  }, 2500);
+}
+</script>
+
+</body>
+</html>
